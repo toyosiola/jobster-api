@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
 const { BadRequestError, UnauthenticatedError } = require("../errors");
-const connectDB = require("../db/connect");
+// const connectDB = require("../db/connect");
 
 const register = async (req, res) => {
   const user = await User.create({ ...req.body });
@@ -27,7 +27,7 @@ const login = async (req, res) => {
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
-  console.log(user._id);
+  // console.log(user._id);
   // compare password
   const isPasswordCorrect = await user.comparePassword(password);
   if (!isPasswordCorrect) {
@@ -56,7 +56,7 @@ const updateUser = async (req, res) => {
     throw new BadRequestError("Please provide all values");
   }
 
-  const user = await User.findOneA({ _id: req.user.userId });
+  const user = await User.findOne({ _id: req.user.userId });
   user.name = name;
   user.email = email;
   user.lastName = lastName;

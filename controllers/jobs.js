@@ -109,7 +109,7 @@ const deleteJob = async (req, res) => {
     params: { id: jobId },
   } = req;
 
-  const job = await Job.findByIdAndRemove({
+  const job = await Job.findByIdAndDelete({
     _id: jobId,
     createdBy: userId,
   });
@@ -122,7 +122,7 @@ const deleteJob = async (req, res) => {
 const showStats = async (req, res) => {
   // get job stats by status
   let stats = await Job.aggregate([
-    { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+    { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
     { $group: { _id: "$status", count: { $count: {} } } },
   ]);
 
@@ -140,7 +140,7 @@ const showStats = async (req, res) => {
 
   // get monthly application stats for the last 6 months
   let monthlyApplications = await Job.aggregate([
-    { $match: { createdBy: mongoose.Types.ObjectId(req.user.userId) } },
+    { $match: { createdBy: new mongoose.Types.ObjectId(req.user.userId) } },
     {
       $group: {
         _id: { year: { $year: "$createdAt" }, month: { $month: "$createdAt" } },
